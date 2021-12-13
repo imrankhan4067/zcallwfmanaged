@@ -1,0 +1,98 @@
+_schema-version: '3.2'
+ID: zcallwfman
+version: 0.0.1
+modules:
+  - name: zcallwfman-destination-content
+    type: com.sap.application.content
+    requires:
+      - name: zcallwfman-destination-service
+        parameters:
+          content-target: true
+      - name: zcallwfman_html_repo_host
+        parameters:
+          service-key:
+            name: zcallwfman_html_repo_host-key
+      - name: uaa_zcallwfman
+        parameters:
+          service-key:
+            name: uaa_zcallwfman-key
+      - name: workflow_zabc
+    parameters:
+      content:
+        subaccount:
+          destinations:
+            - Name: zcallwf_zcallwfman_html_repo_host
+              ServiceInstanceName: zcallwfman-html5-app-host-service
+              ServiceKeyName: zcallwfman_html_repo_host-key
+              sap.cloud.service: zcallwf
+            - Authentication: OAuth2UserTokenExchange
+              Name: zcallwf_uaa_zcallwfman
+              ServiceInstanceName: zcallwfman-xsuaa-service
+              ServiceKeyName: uaa_zcallwfman-key
+              sap.cloud.service: zcallwf
+          existing_destinations_policy: ignore
+    build-parameters:
+      no-source: true
+  - name: zcallwfman-app-content
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: zcallwfman_html_repo_host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources
+      requires:
+        - artifacts:
+            - wfzcallwfmanapp.zip
+          name: wfzcallwfmanapp
+          target-path: resources/
+  - name: wfzcallwfmanapp
+    type: html5
+    path: zcallwfmanapp
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - 'npm run build:cf'
+      supported-platforms: []
+resources:
+  - name: zcallwfman-destination-service
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          subaccount:
+            destinations:
+              - Authentication: NoAuthentication
+                Name: ui5
+                ProxyType: Internet
+                Type: HTTP
+                URL: 'https://ui5.sap.com'
+            existing_destinations_policy: update
+        version: 1.0.0
+      service: destination
+      service-name: zcallwfman-destination-service
+      service-plan: lite
+  - name: zcallwfman_html_repo_host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-name: zcallwfman-html5-app-host-service
+      service-plan: app-host
+  - name: uaa_zcallwfman
+    type: org.cloudfoundry.managed-service
+    parameters:
+      path: ./xs-security.json
+      service: xsuaa
+      service-name: zcallwfman-xsuaa-service
+      service-plan: application
+  - name: workflow_zabc
+    type: org.cloudfoundry.existing-service
+    parameters:
+      service: Workflow
+      service-plan: lite
+parameters:
+  deploy_mode: html5-repo

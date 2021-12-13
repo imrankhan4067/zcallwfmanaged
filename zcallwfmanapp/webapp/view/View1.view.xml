@@ -1,0 +1,22 @@
+<mvc:View
+    controllerName="wf.zcallwfmanapp.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+    <!-- <Shell id="shell">
+        <App id="app">
+            <pages> -->
+                <Page id="page" title="{i18n>title}">
+                    <content >
+                    <VBox id="vb">
+                    <Button id="pres" text="Call WF" press=".onCallWf"/>
+                     <Button id="mes" text="Press" press=".onPress('btn',$event,{message: 'Button x successfully clicked'})"/>
+                     <Button id="sals" text="Nav" press=".onNav"/>
+                     </VBox>
+                    </content>
+                </Page>
+            <!-- </pages>
+        </App>
+    </Shell> -->
+</mvc:View>

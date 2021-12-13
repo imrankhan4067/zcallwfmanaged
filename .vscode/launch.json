@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "zcallwfmanapp local test",
+      "cwd": "${workspaceFolder}/zcallwfmanapp",
+      "runtimeArgs": [
+        "fiori",
+        "run"
+      ],
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npx",
+      "args": [
+        "--open",
+        "test/flpSandbox.html#wfzcallwfmanapp-display"
+      ],
+      "windows": {
+        "runtimeExecutable": "npx.cmd"
+      },
+      "console": "internalConsole",
+      "internalConsoleOptions": "openOnSessionStart",
+      "env": {
+        "run.config": "{\"handlerId\":\"fiori_tools\",\"runnableId\":\"/home/user/projects/zcallwfman/zcallwfmanapp\"}",
+        "FIORI_TOOLS_UI5_VERSION": "1.97.0",
+        "FIORI_TOOLS_UI5_URI": "https://ui5.sap.com"
+      }
+    }
+  ]
+}
